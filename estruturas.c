@@ -5,7 +5,7 @@
 
 void binarySearchTreeMenu() {
   int choice;
-  Tree tree = createBinarySearchTree();
+  Tree *tree = createBinarySearchTree();
 
   do {
     puts(blue_bg("Qual operação deseja fazer?"));
@@ -21,7 +21,7 @@ void binarySearchTreeMenu() {
       case 1:
         puts("Qual o valor do novo nó?");
         scanf("%d", &value);
-        insertTreeNode(&tree, value);
+        insertTreeNode(tree, value);
         printf("Valor %d adicionado!\n", value);
         break;
       case 2:
@@ -33,18 +33,18 @@ void binarySearchTreeMenu() {
         scanf("%d", &order);
         
         if (order == 1) {
-          preOrder(tree.root);
+          preOrder(tree->root);
         } else if (order == 2) {
-          showTreeOrder(tree.root);
+          showTreeOrder(tree->root);
         } else {
-          posOrder(tree.root);
+          posOrder(tree->root);
         }
         puts("");
         break;
       case 3:
         puts("Qual o valor que você deseja procurar?");
         scanf("%d", &value);
-        TreeNode *node = searchForTreeNode(tree.root, value);
+        TreeNode *node = searchSpecificValue(tree->root, value);
         if (node != NULL) {
           printf(green_fg("Valor encontrado: %d\n"), node->value);
         } else {
@@ -54,7 +54,7 @@ void binarySearchTreeMenu() {
       case 4:
         puts("Qual valor deseja remover?");
         scanf("%d", &value);
-        TreeNode* removedNode = removeNodeFromTree(&tree, value);
+        TreeNode* removedNode = removeNodeFromTree(tree, value);
         if (removedNode != NULL) {
           printf("Valor %d foi removido!\n", value);
         } else {

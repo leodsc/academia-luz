@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+ * TreeNode creation, see that it is different from a Node used in Stack or Queue, since it has parent, left and right pointers, instead of just next
+ */
 typedef struct TreeNode TreeNode;
 
 struct TreeNode {
@@ -13,26 +16,48 @@ struct TreeNode {
   TreeNode *right;
 };
 
-typedef struct {
-  TreeNode *root;
-  int depth;
-} Tree;
+/**
+ * TreeNode constructor
+ */
+
+TreeNode* createTreeNode(int value) {
+  TreeNode *node = malloc(sizeof(TreeNode));
+  node->value = value;
+  node->left = NULL;
+  node->right = NULL;
+  return node;
+}
+
+/**
+ * Functions declarations
+ */
 
 void searchIntoNode(TreeNode *node, int value);
 TreeNode* insertIntoLeftNode(TreeNode *node, int value);
 TreeNode* insertIntoRightNode(TreeNode *node, int value);
 
-Tree createBinarySearchTree() {
-  Tree t;
+/**
+ * Binary search tree constructor
+ */
 
-  t.root = malloc(sizeof(TreeNode));
-  t.depth = 0;
+typedef struct {
+  TreeNode *root;
+  int depth;
+} Tree;
 
+Tree* createBinarySearchTree() {
+  Tree *t = malloc(sizeof(Tree));
+
+  t->depth = 0;
   return t;
 }
 
+/**
+ * Insert a new node using an existing tree
+ */
+
 void insertTreeNode(Tree *tree, int value) {
-  TreeNode *node = malloc(sizeof(TreeNode));
+  TreeNode *node = createTreeNode(value);
   if (tree->depth == 0) {
     node->left = NULL;
     node->right = NULL;
@@ -40,23 +65,33 @@ void insertTreeNode(Tree *tree, int value) {
     node->value = value;
     tree->root = node;
   } else {
+    // will search starting the the root to check where it can be inserted
     searchIntoNode(tree->root, value);
   }
+  // increase number of nodes in the tree
   tree->depth++;
 }
 
-TreeNode *searchForTreeNode(TreeNode *node, int value) {
+/*
+ * Searches for a specific value inside the tree
+ */
+
+TreeNode *searchSpecificValue(TreeNode *node, int value) {
+  // current node has value equal to the provided one
   if (node->value == value) {
     return node;
   } else {
+    // node is possibly in the left child of current node
     if (node->value > value && node->left != NULL) {
-      return searchForTreeNode(node->left, value);
+      return searchSpecificValue(node->left, value);
     }
 
+    // node is possible in the right child of current node
     if (node->value <= value && node->right != NULL) {
-      return searchForTreeNode(node->right, value);
+      return searchSpecificValue(node->right, value);
     }
 
+    // if no node was found with provided value
     return NULL;
   }
 }
@@ -66,7 +101,7 @@ static int isNodeAtLeft(TreeNode *node) {
   return node->parent->value > node->value;
 }
 
-static void removeChildlessNode(TreeNode *node) {
+static void removeLeaf(TreeNode *node) {
     if (isNodeAtLeft(node)) {
       node->parent->left = NULL;
     } else {
@@ -76,65 +111,82 @@ static void removeChildlessNode(TreeNode *node) {
 
 static TreeNode* removeNodeWithOneChild(TreeNode *node) {
     TreeNode *aux;
+    // checking if node to be removed has a child in left or right and then saving it in the temporary variable
     if (node->left != NULL) {
       aux = node->left;
     } else {
       aux = node->right;
     }
 
+    // remove the reference from the parent
     if (isNodeAtLeft(node)) {
       node->parent->left = NULL;
     } else {
       node->parent->right = NULL;
     }
 
+    // return removed node's child
     return aux;
 }
 
 static void removeNodeWithBothChilds(TreeNode *node) {
 }
 
+/**
+ * Will remove a specific node with the value provided, and return the removed node
+ */
+
 TreeNode* removeNodeFromTree(Tree *tree, int value) {
-  TreeNode *findedNode = searchForTreeNode(tree->root, value);
+  // find node with the value we want
+  TreeNode *findedNode = searchSpecificValue(tree->root, value);
   TreeNode *aux = findedNode;
 
+  // if no node was found with this value
   if (findedNode == NULL) {
     return NULL;
   }
 
+  // using this 3 flags we will decide the removal method we will call
   int noLeftChild = findedNode->left == NULL;
   int noRightChild = findedNode->right == NULL;
   int hasBothChilds = !noLeftChild && !noRightChild;
 
   if (noLeftChild && noRightChild) {
-    removeChildlessNode(findedNode);
+    removeLeaf(findedNode);
   } else if (hasBothChilds) {
     removeNodeWithBothChilds(findedNode);
   } else {
     TreeNode *childNode = removeNodeWithOneChild(findedNode);
+
+    // transfer removed node child into its parent
     if (findedNode->parent->value > childNode->value) {
       findedNode->parent->left = childNode;
     } else {
       findedNode->parent->right = childNode;
     }
   }
-  // why?
   free(findedNode);
   return aux;
 }
 
+/*
+ * Search for where the node can be inserted
+ */
 void searchIntoNode(TreeNode *node, int value) {
-  TreeNode *insertedNode;
   if (node->value > value) {
+    // provided node is less than the currentNode
+    // check if this node is empty, if it is, then we can insert the new node in the left pointer of the current node in the function call
     if (node->left == NULL) {
-      insertedNode = insertIntoLeftNode(node, value);
+      TreeNode *insertedNode = insertIntoLeftNode(node, value);
       insertedNode->parent = node;
     } else {
+      // if not NULL, then keep searching
       searchIntoNode(node->left, value);
     }
   } else {
+    // same as above, but for the right side
     if (node->right == NULL) {
-      insertedNode = insertIntoRightNode(node, value);
+      TreeNode *insertedNode = insertIntoRightNode(node, value);
       insertedNode->parent = node;
     } else {
       searchIntoNode(node->right, value);
@@ -144,16 +196,14 @@ void searchIntoNode(TreeNode *node, int value) {
 }
 
 TreeNode* insertIntoRightNode(TreeNode *node, int value) {
-  node->right = malloc(sizeof(TreeNode));
-  node->right->value = value;
+  node->right = createTreeNode(value);
   node->right->right = NULL;
   node->right->left = NULL;
   return node->right;
 }
 
 TreeNode *insertIntoLeftNode(TreeNode *node, int value) {
-  node->left = malloc(sizeof(TreeNode));
-  node->left->value = value;
+  node->left = createTreeNode(value);
   node->left->left = NULL;
   node->left->right = NULL;
   return node->left;
