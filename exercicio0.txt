@@ -1,0 +1,33 @@
+1. O que é uma variável?
+
+Variável é um espaço de memória alocado no computador que tem um valor designado a ele. Por exemplo, usando pseudocódigo, temos:
+
+INTEIRO x;
+x = 10;
+y = 5;
+
+PRINT X+Y // resultado é igual a 15
+
+x = 15
+PRINT X+Y // resultado é 20
+
+Como podemos ver, o valor de x mudou ao longo da execução desse pseudocódigo, tendo o valor dentro da memória alterado quando demos a intrução de x = 15.
+
+
+2. Qual a diferença entre heap e stack?
+
+Stack é um espaço dentro da memória RAM focado em armazenar dados que não terão seu tamanho alterado ao longo da execução do programa. Por exemplo, no pseudocódigo do exercício 1, temos que x é uma variável alocada dentro do stack e seu valor é usado pelo programa enquanto ele ainda não deixou de ser utilizado, por exemplo, quando uma subrotina termina. No exemplo, o valor de y é retirado do stack no momento em que o programa termina, e logo depois o valor de y. Os valores dentro do stack são retirados por meio de FIFO.
+Heap é um outro espaço dentro da memória RAM usado para armazenar dados que podem ter seu tamanho alterado ao longo da execução do programa. Por exemplo, Se temos um array que pode ter um tamanho que vai de 0 até 100, ele terá seus valores armazenados dentro do Heap em um espaço em que ele caiba, e será chamado dentro do stack utilizando o endereço de memória que foi usado para armazenar esse valor.
+
+3. Qual a diferença entre malloc e calloc?
+
+Quando usamos o malloc, ele recebe apenas um argumento, que é o tamanho de bytes que será ocupado por aquele array, enquanto o calloc armazena tambem a quantidade de dados que será armazenada.
+
+4. Qual a diferença entre atribuição implicita e explicita?
+
+Atribuição explicita é quando o tipo da variável é descrito para o programa.
+
+5. 
+O endereço que pertence a variavel1 armazena o valor 10.
+O endereço que pertence a variavel2 armazena um ponteiro que aponta para o endereço da variavel1.
+O endereço que pertence a variavel3 armazena um ponteiro que aponta para o endereço da variavel2.
