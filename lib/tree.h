@@ -264,8 +264,24 @@ TreeNode *insertIntoLeftNode(TreeNode *node, int value) {
   return node->left;
 }
 
-void eraseAllNodesFromTree(Tree *tree) {
+void eraseNodes(TreeNode *node) {
+  if (node->left != NULL) {
+    eraseNodes(node->left);
+  }
 
+  if (node->right != NULL) {
+    eraseNodes(node->right);
+  }
+
+  free(node);
+  return;
+}
+
+void eraseAllNodesFromTree(Tree *tree) {
+  if (tree->root->left != NULL && tree->root->right != NULL) {
+    eraseNodes(tree->root);
+    tree->depth = 0;
+  }
 }
 
 void preOrder(TreeNode *node) {
