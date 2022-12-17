@@ -5,6 +5,9 @@
 
 void binarySearchTreeMenu() {
   int choice;
+  int defaultNodes[15] = {
+    25, 15, 50, 10, 22, 4, 12, 18, 24, 35, 70, 31, 44, 66, 90
+  };
   Tree *tree = createBinarySearchTree();
 
   do {
@@ -13,6 +16,8 @@ void binarySearchTreeMenu() {
     puts("2 - Mostrar Arvóre");
     puts("3 - Procurar por valor");
     puts("4 - Remover nó");
+    puts("5 - Contruir árvore");
+    puts("6 - Excluir todos os nós");
     puts("0 - Voltar");
 
     int value;
@@ -32,12 +37,14 @@ void binarySearchTreeMenu() {
         puts("3 - Pós-ordem");
         scanf("%d", &order);
         
+        if (tree->root != NULL) {
         if (order == 1) {
           preOrder(tree->root);
         } else if (order == 2) {
           showTreeOrder(tree->root);
         } else {
           posOrder(tree->root);
+        }
         }
         puts("");
         break;
@@ -61,6 +68,16 @@ void binarySearchTreeMenu() {
           puts("Valor não existe");
         }
         
+        break;
+      case 5:
+        for (int i = 0; i < 15; i++) {
+          insertTreeNode(tree, defaultNodes[i]);
+        }
+        puts("Árvore contruída");
+        break;
+      case 6:
+        eraseAllNodesFromTree(tree);
+        puts("Árvore excluída");
         break;
     }
 

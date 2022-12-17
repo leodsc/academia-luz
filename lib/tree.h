@@ -7,13 +7,20 @@
  * TreeNode creation, see that it is different from a Node used in Stack or Queue, since it has parent, left and right pointers, instead of just next
  */
 typedef struct TreeNode TreeNode;
+typedef struct Tree Tree;
 
 struct TreeNode {
   int isRoot;
   int value;
+  Tree *tree;
   TreeNode *parent;
   TreeNode *left;
   TreeNode *right;
+};
+
+struct Tree {
+  TreeNode *root;
+  int depth;
 };
 
 /**
@@ -40,11 +47,6 @@ TreeNode* insertIntoRightNode(TreeNode *node, int value);
  * Binary search tree constructor
  */
 
-typedef struct {
-  TreeNode *root;
-  int depth;
-} Tree;
-
 Tree* createBinarySearchTree() {
   Tree *t = malloc(sizeof(Tree));
 
@@ -61,6 +63,7 @@ void insertTreeNode(Tree *tree, int value) {
   if (tree->depth == 0) {
     node->left = NULL;
     node->right = NULL;
+    node->tree = tree;
     node->isRoot = 1;
     node->value = value;
     tree->root = node;
@@ -109,27 +112,80 @@ static void removeLeaf(TreeNode *node) {
     }
 }
 
-static TreeNode* removeNodeWithOneChild(TreeNode *node) {
+static void eraseNodeFromParent(TreeNode *node) {
+  if (isNodeAtLeft(node)) {
+    node->parent->left = NULL;
+  } else {
+    node->parent->right = NULL;
+  }
+}
+
+
+static void removeNodeWithOneChild(TreeNode *node) {
     TreeNode *aux;
     // checking if node to be removed has a child in left or right and then saving it in the temporary variable
+    printf("here");
     if (node->left != NULL) {
       aux = node->left;
+      node->parent->left = aux;
     } else {
       aux = node->right;
+      node->parent->right = aux;
     }
+}
 
-    // remove the reference from the parent
-    if (isNodeAtLeft(node)) {
-      node->parent->left = NULL;
-    } else {
-      node->parent->right = NULL;
+static void assignNewParent(TreeNode *toBeRemoved, TreeNode *node) {
+  if (isNodeAtLeft(toBeRemoved)) {
+    toBeRemoved->parent->left = node;
+  } else {
+    toBeRemoved->parent->right = node;
+  }
+}
+
+static void swapRemovedNode(TreeNode *toBeRemoved, TreeNode *node) {
+  eraseNodeFromParent(node);
+  assignNewParent(toBeRemoved, node);
+
+  // assign old node's left and right to new one
+  node->left = toBeRemoved->left;
+  node->right = toBeRemoved->right;
+
+  if (toBeRemoved->isRoot) {
+    toBeRemoved->tree->root = node;
+  }
+}
+
+static TreeNode* findInorderSuccessor(TreeNode *node) {
+  if (node->right != NULL) {
+    node = node->right;
+    while (node->left != NULL) {
+      node = node->left;
     }
+    return node;
+  }
+  return NULL;
+}
 
-    // return removed node's child
-    return aux;
+static void findInorderPredecessor(TreeNode *node) {
 }
 
 static void removeNodeWithBothChilds(TreeNode *node) {
+  TreeNode *successor = findInorderSuccessor(node);
+
+  if (successor != NULL) {
+    swapRemovedNode(node, successor);
+  }
+
+  //TreeNode *predecessor = findInorderPredecessor(node);
+}
+
+static TreeNode* removeSingleNode(Tree *tree) {
+  // root has no child
+  TreeNode *aux = tree->root;
+  tree->root = NULL;
+  free(tree->root);
+  tree->depth--;
+  return aux;
 }
 
 /**
@@ -140,6 +196,11 @@ TreeNode* removeNodeFromTree(Tree *tree, int value) {
   // find node with the value we want
   TreeNode *findedNode = searchSpecificValue(tree->root, value);
   TreeNode *aux = findedNode;
+
+  // if node is root, then we will need another approach
+  if (tree->depth == 1) {
+    return removeSingleNode(tree);
+  }
 
   // if no node was found with this value
   if (findedNode == NULL) {
@@ -156,16 +217,10 @@ TreeNode* removeNodeFromTree(Tree *tree, int value) {
   } else if (hasBothChilds) {
     removeNodeWithBothChilds(findedNode);
   } else {
-    TreeNode *childNode = removeNodeWithOneChild(findedNode);
-
-    // transfer removed node child into its parent
-    if (findedNode->parent->value > childNode->value) {
-      findedNode->parent->left = childNode;
-    } else {
-      findedNode->parent->right = childNode;
-    }
+    removeNodeWithOneChild(findedNode);
   }
   free(findedNode);
+  tree->depth--;
   return aux;
 }
 
@@ -207,6 +262,10 @@ TreeNode *insertIntoLeftNode(TreeNode *node, int value) {
   node->left->left = NULL;
   node->left->right = NULL;
   return node->left;
+}
+
+void eraseAllNodesFromTree(Tree *tree) {
+
 }
 
 void preOrder(TreeNode *node) {
