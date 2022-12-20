@@ -64,13 +64,22 @@ class LinkedList {
         this->head = node;
         this->tail = node;
       } else {
-        Node *linkedNode = this->head;
-        while (linkedNode->hasNext()) {
-          linkedNode = linkedNode->getNext();
-        }
-        linkedNode->setNext(node);
+        this->tail->setNext(node);
+        this->tail = node;
       }
       this->size++;
+    }
+
+    int dequeue() {
+      if (this->size > 0) {
+        Node *aux = this->head;
+        int value = this->head->getValue();
+        this->head = this->head->getNext();
+        delete aux;
+        this->size--;
+        return value;
+      }
+      return -1;
     }
 
     int removeAt(int position) {
