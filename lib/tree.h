@@ -105,11 +105,11 @@ static int isNodeAtLeft(TreeNode *node) {
 }
 
 static void removeLeaf(TreeNode *node) {
-    if (isNodeAtLeft(node)) {
-      node->parent->left = NULL;
-    } else {
-      node->parent->right = NULL;
-    }
+  if (isNodeAtLeft(node)) {
+    node->parent->left = NULL;
+  } else {
+    node->parent->right = NULL;
+  }
 }
 
 static void eraseNodeFromParent(TreeNode *node) {
@@ -120,21 +120,27 @@ static void eraseNodeFromParent(TreeNode *node) {
   }
 }
 
-
-static void removeNodeWithOneChild(TreeNode *node) {
+static TreeNode *removeNodeWithOneChild(TreeNode *node) {
     TreeNode *aux;
     // checking if node to be removed has a child in left or right and then saving it in the temporary variable
-    printf("here");
     if (node->left != NULL) {
       aux = node->left;
-      node->parent->left = aux;
+      if (node->parent != NULL) {
+        node->parent->left = aux;
+      }
     } else {
       aux = node->right;
-      node->parent->right = aux;
+      if (node->parent != NULL) {
+        node->parent->right = aux;
+      }
     }
+
+    aux->parent = node->parent;
+    return aux;
 }
 
 static void assignNewParent(TreeNode *toBeRemoved, TreeNode *node) {
+  printf("parent: %d\n", toBeRemoved->parent->value);
   if (isNodeAtLeft(toBeRemoved)) {
     toBeRemoved->parent->left = node;
   } else {
@@ -143,15 +149,21 @@ static void assignNewParent(TreeNode *toBeRemoved, TreeNode *node) {
 }
 
 static void swapRemovedNode(TreeNode *toBeRemoved, TreeNode *node) {
-  eraseNodeFromParent(node);
-  assignNewParent(toBeRemoved, node);
+  if (toBeRemoved->isRoot) {
+    node->isRoot = 1;
+    toBeRemoved->tree->root = node;
+    eraseNodeFromParent(node);
+  } else {
+    assignNewParent(toBeRemoved, node);
+  }
 
   // assign old node's left and right to new one
-  node->left = toBeRemoved->left;
-  node->right = toBeRemoved->right;
+  if (node != toBeRemoved->left) {
+    node->left = toBeRemoved->left;
+  }
 
-  if (toBeRemoved->isRoot) {
-    toBeRemoved->tree->root = node;
+  if (node != toBeRemoved->right) {
+    node->right = toBeRemoved->right;
   }
 }
 
@@ -169,13 +181,14 @@ static TreeNode* findInorderSuccessor(TreeNode *node) {
 static void findInorderPredecessor(TreeNode *node) {
 }
 
-static void removeNodeWithBothChilds(TreeNode *node) {
+static TreeNode *removeNodeWithBothChilds(TreeNode *node) {
   TreeNode *successor = findInorderSuccessor(node);
 
   if (successor != NULL) {
     swapRemovedNode(node, successor);
   }
 
+  return successor;
   //TreeNode *predecessor = findInorderPredecessor(node);
 }
 
@@ -193,6 +206,10 @@ static TreeNode* removeSingleNode(Tree *tree) {
  */
 
 TreeNode* removeNodeFromTree(Tree *tree, int value) {
+  if (tree->depth == 0) {
+    return NULL;
+  }
+
   // find node with the value we want
   TreeNode *findedNode = searchSpecificValue(tree->root, value);
   TreeNode *aux = findedNode;
@@ -212,12 +229,19 @@ TreeNode* removeNodeFromTree(Tree *tree, int value) {
   int noRightChild = findedNode->right == NULL;
   int hasBothChilds = !noLeftChild && !noRightChild;
 
+  TreeNode *substituteNode;
   if (noLeftChild && noRightChild) {
     removeLeaf(findedNode);
   } else if (hasBothChilds) {
-    removeNodeWithBothChilds(findedNode);
+    puts("y: 2");
+    substituteNode = removeNodeWithBothChilds(findedNode);
   } else {
-    removeNodeWithOneChild(findedNode);
+    puts("y: 3");
+    substituteNode = removeNodeWithOneChild(findedNode);
+  }
+
+  if (findedNode->isRoot) {
+    tree->root = substituteNode;
   }
   free(findedNode);
   tree->depth--;

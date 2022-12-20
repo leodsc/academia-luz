@@ -61,6 +61,7 @@ void binarySearchTreeMenu() {
       case 4:
         puts("Qual valor deseja remover?");
         scanf("%d", &value);
+        puts("Qual valor deseja remover?");
         TreeNode* removedNode = removeNodeFromTree(tree, value);
         if (removedNode != NULL) {
           printf("Valor %d foi removido!\n", value);
