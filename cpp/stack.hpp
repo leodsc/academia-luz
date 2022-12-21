@@ -13,7 +13,7 @@ class Stack {
     };
 
     int pop() {
-      return this->linkedList->pop();
+      return this->linkedList->removeAt(0);
     }
 
     void print() {

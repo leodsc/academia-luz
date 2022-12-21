@@ -9,7 +9,7 @@ class Node {
   public:
     Node(int v = 0) {value = v; next = nullptr;}
              
-    void operator + (Node *node) {
+    void operator+ (Node *node) {
       if (this->next == nullptr) {
         this->next = node;
       }

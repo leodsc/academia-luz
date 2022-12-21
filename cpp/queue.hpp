@@ -8,12 +8,12 @@ class Queue {
       return this->linkedList->getHead();
     }
 
-    void push(int value) {
-      this->linkedList->enqueue(value);
+    void enqueue(int value) {
+      this->linkedList->insertEnd(value);
     }
 
-    int unshift() {
-      return this->linkedList->dequeue();
+    int dequeue() {
+      return this->linkedList->removeFirst();
     }
 
     void print() {

@@ -18,6 +18,7 @@ void nodeMenu() {
   log("Linkando segundo nó (50) ao terceiro (60)");
   *c2 + c3;
   c1->print();
+  c2->print();
 
   log("Removendo ligação do primeiro nó com o segundo");
   c1->remove();
@@ -62,17 +63,17 @@ void queueMenu() {
 
   queue->print();
   log("Adicionando 3 valores: 500, 100 e 200");
-  queue->push(500);
-  queue->push(100);
-  queue->push(200);
+  queue->enqueue(500);
+  queue->enqueue(100);
+  queue->enqueue(200);
   queue->print();
 
-  v = queue->unshift();
+  v = queue->dequeue();
   cout << "Removido primero valor: " << v << endl;
   queue->print();
 
   log("Adiconando valor 300");
-  queue->push(300);
+  queue->enqueue(300);
   queue->print();
 }
 
