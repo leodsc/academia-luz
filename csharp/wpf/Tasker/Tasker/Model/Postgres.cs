@@ -3,6 +3,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
@@ -50,36 +51,42 @@ namespace Tasker.Model
             return this;
         }
 
-        public List<Dictionary<string, object>> Select(string columns, string query)
+        public List<ITable> Select(string query, Type table)
         {
-            CreateConnection();
-            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
-
-            query = String.Format("SELECT {0} FROM task {1} ", columns, query);
+            List<ITable> list = new List<ITable>();
 
             NpgsqlCommand cmd = new NpgsqlCommand(query, pgsqlConnection);
             NpgsqlDataReader dr = cmd.ExecuteReader();
 
-            int TOTAL_COLUMNS = dr.FieldCount;
-            List<string> columnsNames = new List<string>();
-            for (int i = 0; i < TOTAL_COLUMNS; i++)
-            {
-                columnsNames.Add(dr.GetName(i));
-            }
+            return list;
+        }
+
+        public List<ITable> Select(string columns, Type table, string extras)
+        {
+            CreateConnection();
+            List<ITable> list = new List<ITable>();
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+
+            string query = String.Format("SELECT {0} FROM task {1} ", columns, extras);
+
+            NpgsqlCommand cmd = new NpgsqlCommand(query, pgsqlConnection);
+            NpgsqlDataReader dr = cmd.ExecuteReader();
 
             while (dr.Read())
             {
-                Dictionary<string, object> rowInfo = new Dictionary<string, object>();
-                for (int i = 0; i < TOTAL_COLUMNS; i++)
+                for (int i = 0; i < dr.FieldCount; i++)
                 {
-                    rowInfo.Add(dr.GetName(i), dr[i]);
+                    dict.Add(dr.GetName(i), dr[i]);
                 }
 
-                rows.Add(rowInfo);
+                ITable collection = (ITable) Activator.CreateInstance(table, dict);
+
+                dict = new Dictionary<string, object>();
+                list.Add(collection);
             }
 
             CloseConnection();
-            return rows;
+            return list;
         }
 
         public ITable Insert(ITable obj)
@@ -95,7 +102,7 @@ namespace Tasker.Model
                 {
                     columns += String.Format("{0}", prop.Name);
                     values += String.Format("'{0}'", prop.GetValue(obj));
-
+            
                     bool isLastColumn = i == obj.GetType().GetProperties().Length - 1;
                     if (!isLastColumn)
                     {
@@ -106,6 +113,7 @@ namespace Tasker.Model
 
                 i++;
             }
+
             string query = String.Format("INSERT INTO {0} ({1}) VALUES({2}) RETURNING id", tableName, columns.ToLower(), values);
             NpgsqlCommand cmd = new NpgsqlCommand(query, pgsqlConnection);
             object id = cmd.ExecuteScalar();

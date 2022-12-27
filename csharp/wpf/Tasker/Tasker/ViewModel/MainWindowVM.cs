@@ -29,7 +29,7 @@ namespace Tasker.ViewModel
         public Task SelectedTask { get; set; }
 
         public IDatabase connection = new Postgres();
-        public ObservableCollection<Task> Tasks { get; set; } = new ObservableCollection<Task>();
+        public ObservableCollection<ITable> Tasks { get; set; }
         public MainWindowVM()
         {
             CreateCommands();
@@ -38,8 +38,8 @@ namespace Tasker.ViewModel
 
         private void LoadTasks()
         {
-            List<Dictionary<string, object>> tasksDict = connection.Select("*", "");
-            Tasks = Task.FromDatabase(tasksDict);
+            List<ITable> tasks = connection.Select("*", typeof(Task), "");
+            Tasks = new ObservableCollection<ITable>(tasks);
         }
 
         public void CreateCommands()

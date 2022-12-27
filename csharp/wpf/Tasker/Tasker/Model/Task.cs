@@ -52,16 +52,6 @@ namespace Tasker.Model
             return (Task) this.MemberwiseClone();
         }
 
-        public static ObservableCollection<Task> FromDatabase(List<Dictionary<string, object>> tasksDict)
-        {
-            ObservableCollection<Task> tasks = new ObservableCollection<Task>();
-            foreach (Dictionary<string, object> dict in tasksDict)
-            {
-                tasks.Add(new Task(dict));
-            }
-            return tasks;
-        }
-
         public string Title { get { return title; } set
             {
                 title = value;

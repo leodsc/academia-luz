@@ -9,7 +9,7 @@ namespace Tasker.Model
 {
     public interface IDatabase
     {
-        List<Dictionary<string, object>> Select(string columns, string query);
+        List<ITable> Select(string columns, Type table, string extras);
         ITable Insert(ITable obj);
         void Delete(string query);
         void Update(ITable obj);
