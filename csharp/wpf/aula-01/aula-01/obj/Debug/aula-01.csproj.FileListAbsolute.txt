@@ -1,0 +1,16 @@
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\bin\Debug\aula-01.exe.config
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\bin\Debug\aula-01.exe
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\bin\Debug\aula-01.pdb
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01.csproj.AssemblyReference.cache
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01.csproj.SuggestedBindingRedirects.cache
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\MainWindow.g.cs
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\App.g.cs
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01_MarkupCompile.cache
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01_MarkupCompile.lref
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\MainWindow.baml
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01.g.resources
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula_01.Properties.Resources.resources
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01.csproj.GenerateResource.cache
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01.csproj.CoreCompileInputs.cache
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01.exe
+\\wsl.localhost\Ubuntu\home\leo\academia-luz\csharp\wpf\aula-01\aula-01\obj\Debug\aula-01.pdb

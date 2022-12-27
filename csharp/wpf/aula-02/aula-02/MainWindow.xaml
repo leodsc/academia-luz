@@ -1,0 +1,41 @@
+﻿<Window x:Class="aula_02.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:aula_02"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Button Command="{Binding Add}" Background="#28a745" Foreground="white" FontWeight="Bold" FontSize="16" Content="Add" HorizontalAlignment="Left" Margin="420,0,0,0" VerticalAlignment="Center" Height="41" Width="105">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <ListView ItemsSource="{Binding users}" SelectedItem="{Binding selectedUser}" Margin="0,0,431,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Email}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Password}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Command="{Binding Remove}" Background="#dc3545" Foreground="white" FontWeight="Bold" FontSize="16" Content="Remove" HorizontalAlignment="Left" Margin="635,0,0,0" VerticalAlignment="Center" Height="41" Width="105">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <TextBox Text="{Binding name}"  HorizontalAlignment="Left" Margin="521,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+        <TextBox Text="{Binding email}"  HorizontalAlignment="Left" Margin="521,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+        <TextBox Text="{Binding password}"  HorizontalAlignment="Left" Margin="521,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="556,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Nome"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="560,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Email"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="556,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Senha"/></TextBlock>
+
+    </Grid>
+</Window>
